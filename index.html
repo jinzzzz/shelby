@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shelby AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    color: white;
+    background: url("/static/bg.jpg") no-repeat center center/cover;
+}
+
+/* overlay tối */
+.overlay {
+    background: rgba(0,0,0,0.7);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* tiêu đề */
+.title {
+    text-align: center;
+    font-size: 50px;
+    color: #a855f7;
+    text-shadow: 0 0 10px #a855f7, 0 0 30px #22d3ee;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+}
+
+/* typing text */
+.typing {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 30px;
+
+    border-right: 2px solid white;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+
+    animation: typing 5s steps(40) forwards, blink 0.7s infinite;
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 520px }
+}
+
+@keyframes blink {
+    50% { border-color: transparent }
+}
+
+/* layout */
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+/* card */
+.card {
+    background: rgba(15, 23, 42, 0.7);
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 15px;
+
+    backdrop-filter: blur(10px);
+
+    box-shadow:
+        0 0 10px #22d3ee,
+        0 0 20px rgba(168,85,247,0.5);
+}
+
+/* input + button */
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    padding: 10px;
+    background: #a855f7;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #9333ea;
+}
+
+/* image */
+img {
+    border-radius: 10px;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+img:hover {
+    transform: scale(1.05);
+}
+
+/* top bar */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="overlay">
+
+<div class="container">
+
+    <!-- 🔥 TITLE -->
+    <h1 class="title">Shelby AI</h1>
+
+    <!-- ⌨️ typing -->
+    <div class="typing">
+        Decentralized AI • Verifiable Data • Future Infrastructure
+    </div>
+
+    <!-- 🔐 top bar -->
+    <div class="topbar">
+        <div>👤 {{ current_user.username }}</div>
+        <a href="/logout" style="color:white;">Logout</a>
+    </div>
+
+    <!-- 🔍 SEARCH -->
+    <div class="card">
+        <form method="get">
+            <input name="search" placeholder="Search prompt...">
+            <button>Search</button>
+        </form>
+    </div>
+
+    <!-- 🎨 GENERATE -->
+    <div class="card">
+        <form action="/generate" method="post">
+            <input name="prompt" placeholder="Describe image..." required>
+            <button>Generate</button>
+        </form>
+    </div>
+
+    <!-- 🖼️ GALLERY -->
+    {% for img in images %}
+    <div class="card">
+        <p><b>{{ img.prompt }}</b></p>
+
+        <img src="/static/{{ img.filename }}" width="250">
+
+        <p>⏰ {{ img.time }}</p>
+        <p>🔗 {{ img.hash[:20] }}...</p>
+
+        <a href="/download/{{ img.filename }}">
+            <button>⬇️ Download</button>
+        </a>
+    </div>
+    {% endfor %}
+
+</div>
+</div>
+
+</body>
+</html>
